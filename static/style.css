@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.jumbotron {
+    background-color: #477BFF !important;
+}
+
+.jumbotron h1 {
+    /* position: relative;
+    bottom: 30px; */
+    margin-bottom: 50px;
+    font-weight: 700;
+}
+
+form {
+    margin: 20px;
+}
+
+input {
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    margin: 5px;
+}
+
+input:focus {
+    outline: none;
+}
+
+.section h2 {
+    margin-top: 100px;
+}
+
+table {
+    margin-top: 50px;
+}
+
+.table > thead > tr:first-child > th {
+    border: none;
+}
+
+hr.line {
+    margin: 5rem;
+}
+
+
+
