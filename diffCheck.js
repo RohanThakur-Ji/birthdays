@@ -16,7 +16,7 @@
             
             let crCode = helper.getCourseRunCode().courseruncode;
             component.set("v.courseRunCode", crCode);
-    
+    		
             
             var timer = setInterval(function() { 
                 if(component.get("v.popupWin").closed) {
@@ -26,7 +26,6 @@
                     component.set("v.spinner", false);
                 }
             }, 1000);
-            
             window.addEventListener("message", $A.getCallback(function(event) {
                 //console.log('addEventListener@@@@@@@@@@@@');
                 console.log('event.data.statusCode @@'+event.data.statusCode);
@@ -56,6 +55,7 @@
                 let currentGrandTotal = component.get("v.grandTotal");
                 
                 if(component.get("v.courseRunRecord.CourseRecordType__c") == 'Funded_Course'){
+                    
                     fullFee = component.get("v.courseRunRecord.Course__r.Full_Fee_with_GST__c");
                     Amount = event.data.Amount;
                     if(fundingList.length>0){
@@ -67,6 +67,8 @@
                     }   
                 }
                 if(component.get("v.courseRunRecord.CourseRecordType__c") == 'Course'){
+                    
+                    
                     if(component.find("isMemberValue").get("v.value")){
                         fullFee = component.get("v.courseRunRecord.Course__r.Member_Total_Fee__c");
                         Amount = event.data.Amount;
@@ -176,8 +178,6 @@
             action.setParams({ courseRunCode :crCode, userId :userId  });
             action.setCallback(this, function(response) {
                 
-                var capture = document.getElementById('capture');
-            console.log('--------- element ------' + capture.style);
                 
                 var state = response.getState();
                 if (state === "SUCCESS") {
@@ -253,6 +253,13 @@
                                 component.set("v.isIbfFunding",true);
                                 
                             }
+                            
+                            if (courseRunRecord.CourseRecordType__c == 'Funded_Course') {
+                                component.set("v.isFundedCourse", true);
+                            } else {
+                                component.set("v.isNonFundedCourse", true);
+                            }
+                            
                             console.log('sfc0 ');
                             if(courseRunRecord.Course__r.Funding__c != null && courseRunRecord.Course__r.Funding__c.includes('SkillsFuture Credit') && courseRunRecord.Course__r.SSG_Course_Reference_Number__c != null ){
                                  console.log('sfc ');
@@ -385,7 +392,6 @@
                     }
             });
             $A.enqueueAction(action);   
-            
             
         },
         
