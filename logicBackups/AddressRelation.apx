@@ -1,0 +1,34 @@
+if ( !newAddressRelationAndContactMap.isEmpty() ) {
+            
+            List<Contact> oldPreferredAddressAndContactRelation = [ SELECT ID, Name, ( SELECT ID, ucinn_ascendv2__Is_Preferred__c FROM ucinn_ascendv2__Address_Relations_Contact__r WHERE ucinn_ascendv2__Is_Preferred__c = true ) FROM Contact WHERE ID IN :newAddressRelationAndContactMap.keySet() ];
+            
+            if ( !oldPreferredAddressAndContactRelation.isEmpty() ) {
+                for ( Contact con : oldPreferredAddressAndContactRelation ) {
+                                       
+                    con.ucinn_ascendv2__Preferred_Address_City__c = newAddressRelationAndContactMap.get( con.Id ).ucinn_ascendv2__Address_City_Formula__c;
+                    con.ucinn_ascendv2__Preferred_Address_State__c = newAddressRelationAndContactMap.get( con.Id ).ucinn_ascendv2__Address_State_Formula__c;
+                    con.ucinn_ascendv2__Preferred_Address_Postal_Code__c = newAddressRelationAndContactMap.get( con.Id ).ucinn_ascendv2__Address_Postal_Code_Formula__c;
+                    con.ucinn_ascendv2__Preferred_Address_Country__c = newAddressRelationAndContactMap.get( con.Id ).Address_Country_Formula__c;
+                    
+                    contactsToUpdate.add( con );
+                    addressRelationsToUpdate.add( con.ucinn_ascendv2__Address_Relations_Contact__r );
+                    
+                }
+            }
+            
+            if ( !addressRelationsToUpdate.isEmpty() ) {
+                for( ucinn_ascendv2__Address_Relation__c addRelRec : addressRelationsToUpdate ) {
+                    if ( addressRelationExclusion.contains( addRelRec.Id ) ) continue;
+                    addRelRec.ucinn_ascendv2__Is_Preferred__c = false;
+                    addressRelationsList.add( addRelRec );
+                }
+            }
+            
+            recordsToUpdate.addAll( addressRelationsList );
+            recordsToUpdate.addAll( contactsToUpdate );
+            
+            System.debug('AR to Update: ' + addressRelationsList);
+            System.debug('Con to update: ' + contactsToUpdate);
+            System.debug('Combined List: ' + recordsToUpdate);
+            
+        }
